@@ -28,6 +28,10 @@
       "type" : "string",
       "defaultValue" : ""
     }
+    "storageHTTPS" : {
+      "type" : "bool",
+      "defaultValue" : true
+    }
   },
   "resources": [
     {
@@ -37,7 +41,7 @@
 	"location": "[parameters('location')]",
 	"properties": {
 		"accountType": "[parameters('storageAccountType')]"
-		"supportsHttpsTrafficOnly": true,
+		"supportsHttpsTrafficOnly": "[parameters('storageHTTPS')]",
 	}
      }
   ],
