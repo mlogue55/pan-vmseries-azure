@@ -6,7 +6,7 @@
       "value": "eastus2"
     },
     "newStorageAccount": {
-      "value": "stpalofirewall"
+      "value": "stmlpanfirewall"
     },
     "storageAccountType": {
       "value": "Standard_LRS"
@@ -51,7 +51,7 @@
       "value": "0.0.0.0/0"
     },
     "baseUrl": {
-      "value": "https://raw.githubusercontent.com/PaloAltoNetworks/azure/master/vmseries-avset"
+      "value": "https://raw.githubusercontent.com/mlogue55/pan-vmseries-azure/master/vmseries-avset"
     },
     "virtualNetworkName": {
       "value": "panVnet"

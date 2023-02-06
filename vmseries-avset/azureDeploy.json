@@ -245,8 +245,7 @@
                 "mode": "Incremental",
                 "templateLink": {
                     "uri": "[variables('storageAccountSetupURL')]",
-                    "contentVersion": "1.0.0.0",
-                    "supportsHttpsTrafficOnly": "true"
+                    "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
                     "location": {
