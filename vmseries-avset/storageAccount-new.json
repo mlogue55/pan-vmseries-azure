@@ -37,8 +37,7 @@
             "location": "[parameters('location')]",
             "properties": {
                 "accountType": "[parameters('storageAccountType')]",
-                "supportsHttpsTrafficOnly": true,
-                "enableHttpsTrafficOnly": true
+                "supportsHttpsTrafficOnly": true
             }
         }
     ],
