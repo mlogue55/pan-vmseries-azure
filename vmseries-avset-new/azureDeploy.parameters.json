@@ -18,13 +18,13 @@
       "value": null
     },
     "dnsNameForPublicIP": {
-      "value": "mlpan01"
+      "value": "mlpan001"
     },
     "vmName": {
-      "value": "mlpan01"
+      "value": "mlpan001"
     },
     "adminUserName": {
-      "value": "mlpan01"
+      "value": "mlpan001"
     },
     "adminPassword": {
       "value": "Testing!201555"
@@ -45,7 +45,7 @@
       "value": "Standard_D3_v2"
     },
     "availabilitySetName": {
-      "value": "FwAvSet01"
+      "value": "FwAvSet001"
     },
     "srcIPInboundNSG": {
       "value": "0.0.0.0/0"
@@ -85,6 +85,12 @@
     },
     "subnet2StartAddress": {
       "value": "192.168.2.4"
+    },
+    "availabilitySetPlatformFaultDomainCount": {
+      "value": "2"
+    },
+    "availabilitySetPlatformUpdateDomainCount": {
+        "value": "5"
     }
   }
 }
