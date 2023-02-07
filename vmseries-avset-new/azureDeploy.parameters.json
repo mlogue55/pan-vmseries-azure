@@ -51,7 +51,7 @@
       "value": "0.0.0.0/0"
     },
     "baseUrl": {
-      "value": "https://raw.githubusercontent.com/mlogue55/pan-vmseries-azure/master/vmseries-avset"
+      "value": "https://raw.githubusercontent.com/mlogue55/pan-vmseries-azure/master/vmseries-avset-new"
     },
     "virtualNetworkName": {
       "value": "panVnet"
