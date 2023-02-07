@@ -1,0 +1,90 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "eastus2"
+    },
+    "newStorageAccount": {
+      "value": "stmlpanfirewall"
+    },
+    "storageAccountType": {
+      "value": "Standard_LRS"
+    },
+    "storageAccountNewOrExisting": {
+      "value": "new"
+    },
+    "existingStorageAccountRG": {
+      "value": null
+    },
+    "dnsNameForPublicIP": {
+      "value": "mlpan01"
+    },
+    "vmName": {
+      "value": "mlpan01"
+    },
+    "adminUserName": {
+      "value": "mlpan01"
+    },
+    "adminPassword": {
+      "value": "Testing!201555"
+    },
+    "authenticationType": {
+      "value": "password"
+    },
+    "sshKey": {
+      "value": null
+    },
+    "imageVersion": {
+      "value": "latest"
+    },
+    "imageSku": {
+      "value": "byol"
+    },
+    "vmSize": {
+      "value": "Standard_D3_v2"
+    },
+    "availabilitySetName": {
+      "value": "FwAvSet01"
+    },
+    "srcIPInboundNSG": {
+      "value": "0.0.0.0/0"
+    },
+    "baseUrl": {
+      "value": "https://raw.githubusercontent.com/mlogue55/pan-vmseries-azure/master/vmseries-avset"
+    },
+    "virtualNetworkName": {
+      "value": "panVnet"
+    },
+    "virtualNetworkAddressPrefix": {
+      "value": "192.168.0.0/16"
+    },
+    "subnet0Name": {
+      "value": "Mgmt"
+    },
+    "subnet1Name": {
+      "value": "Untrust"
+    },
+    "subnet2Name": {
+      "value": "Trust"
+    },
+    "subnet0Prefix": {
+      "value": "192.168.0.0/24"
+    },
+    "subnet1Prefix": {
+      "value": "192.168.1.0/24"
+    },
+    "subnet2Prefix": {
+      "value": "192.168.2.0/24"
+    },
+    "subnet0StartAddress": {
+      "value": "192.168.0.4"
+    },
+    "subnet1StartAddress": {
+      "value": "192.168.1.4"
+    },
+    "subnet2StartAddress": {
+      "value": "192.168.2.4"
+    }
+  }
+}

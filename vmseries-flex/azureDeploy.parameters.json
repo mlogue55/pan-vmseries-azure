@@ -1,0 +1,98 @@
+﻿{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "eastus"
+        },
+        "srcIPInboundNSG": {
+            "value": "63.86.188.89/32"
+        },
+        "customData": {
+            "value": "storage-account=None,access-key=None,file-share=None,share-directory=None"
+        },
+        "vmName": {
+            "value": "mlpalofirewall03"
+        },
+        "imageVersion": {
+            "value": "latest"
+        },
+        "vmSize": {
+            "value": "Standard_D3_v2"
+        },
+        "virtualNetworkName": {
+            "value": "fwVNET"
+        },
+        "vnetNewOrExisting": {
+            "value": "new"
+        },
+        "virtualNetworkAddressPrefixes": {
+            "value": [
+                "10.0.0.0/16"
+            ]
+        },
+        "virtualNetworkExistingRGName": {
+            "value": "PaloFirewall1"
+        },
+        "subnet0Name": {
+            "value": "Mgmt"
+        },
+        "subnet1Name": {
+            "value": "Untrust"
+        },
+        "subnet2Name": {
+            "value": "Trust"
+        },
+        "subnet0Prefix": {
+            "value": "10.0.0.0/24"
+        },
+        "subnet1Prefix": {
+            "value": "10.0.1.0/24"
+        },
+        "subnet2Prefix": {
+            "value": "10.0.2.0/24"
+        },
+        "subnet1StartAddress": {
+            "value": "10.0.1.4"
+        },
+        "subnet2StartAddress": {
+            "value": "10.0.2.4"
+        },
+        "authenticationType": {
+            "value": "password"
+        },
+        "adminUsername": {
+            "value": "mlpalo"
+        },
+        "adminPasswordOrKey": {
+            "value": null
+        },
+        "publicIPNewOrExisting": {
+            "value": "new"
+        },
+        "publicIPAddressName": {
+            "value": "mlpan03"
+        },
+        "publicIPRGName": {
+            "value": "PaloFirewall1"
+        },
+        "publicIPAllocationMethod": {
+            "value": "Dynamic"
+        },
+        "bootstrap": {
+            "value": "no"
+        },
+        "zone": {
+            "value": "None"
+        },
+        "availabilitySetName": {
+            "value": "None"
+        },
+        "availabilitySetPlatformFaultDomainCount": {
+            "value": "2"
+        },
+        "availabilitySetPlatformUpdateDomainCount": {
+            "value": "5"
+        }
+    }
+}
