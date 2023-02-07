@@ -42,7 +42,7 @@
       "value": "byol"
     },
     "vmSize": {
-      "value": "Standard_D3_v2"
+      "value": "Standard_DS3_v2"
     },
     "availabilitySetName": {
       "value": "FwAvSet001"
@@ -90,7 +90,7 @@
       "value": "2"
     },
     "availabilitySetPlatformUpdateDomainCount": {
-        "value": "5"
+      "value": "5"
     }
   }
 }
