@@ -59,21 +59,21 @@
             }
         },
         "authenticationType": {
-        "type": "string",
-        "defaultValue": "password",
-        "allowedValues": [
-            "sshPublicKey",
-            "password"
-        ],
-        "metadata": {
-            "description": "Type of authentication to use on the Virtual Machine. SSH key is recommended."
-        }
+            "type": "string",
+            "defaultValue": "password",
+            "allowedValues": [
+                "sshPublicKey",
+                "password"
+            ],
+            "metadata": {
+                "description": "Type of authentication to use on the Virtual Machine. SSH key is recommended."
+            }
         },
         "adminPasswordOrKey": {
-        "type": "secureString",
-        "metadata": {
-            "description": "SSH Key or password for the Virtual Machine. SSH key is recommended."
-        }
+            "type": "secureString",
+            "metadata": {
+                "description": "SSH Key or password for the Virtual Machine. SSH key is recommended."
+            }
         },
         "imageVersion": {
             "type": "string",
@@ -490,65 +490,65 @@
                 ]
             }
         },
-//         {
-//             "name": "PAN-VM",
-//             "type": "Microsoft.Resources/deployments",
-//             "apiVersion": "2015-01-01",
-//             "dependsOn": [
-//                 "storageAcountSetup1",
-//                 "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), '0')]",
-//                 "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), '1')]",
-//                 "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), '2')]"
-//             ],
-//             "properties": {
-//                 "mode": "Incremental",
-//                 "templateLink": {
-//                     "uri": "[variables('vmTemplateUrl')]",
-//                     "contentVersion": "1.0.0.0"
-//                 },
-//                 "parameters": {
-//                     "location": {
-//                         "value": "[parameters('location')]"
-//                     },
-//                     "vmName": {
-//                         "value": "[parameters('vmName')]"
-//                     },
-//                     "imageSku": {
-//                         "value": "[parameters('imageSku')]"
-//                     },
-//                     "imageOffer": {
-//                         "value": "[variables('imageOffer')]"
-//                     },
-//                     "imageVersion": {
-//                         "value": "[parameters('imageVersion')]"
-//                     },
-//                     "imagePublisher": {
-//                         "value": "[variables('imagePublisher')]"
-//                     },
-//                     "nicName": {
-//                         "value": "[variables('nicName')]"
-//                     },
-//                     "vmSize": {
-//                         "value": "[parameters('vmSize')]"
-//                     },
-//                     "adminUserName": {
-//                         "value": "[parameters('adminUserName')]"
-//                     },
-//                     "adminPassword": {
-//                         "value": "[parameters('adminPassword')]"
-//                     },
-//                     "newStorageAccount": {
-//                         "value": "[parameters('newStorageAccount')]"
-//                     },
-//                     "sshKey": {
-//                         "value": "[parameters('sshKey')]"
-//                     },
-//                     "availabilitySetName": {
-//                         "value": "[parameters('availabilitySetName')]"
-//                     }
-//                 }
-//             }
-//         }
+        //         {
+        //             "name": "PAN-VM",
+        //             "type": "Microsoft.Resources/deployments",
+        //             "apiVersion": "2015-01-01",
+        //             "dependsOn": [
+        //                 "storageAcountSetup1",
+        //                 "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), '0')]",
+        //                 "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), '1')]",
+        //                 "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), '2')]"
+        //             ],
+        //             "properties": {
+        //                 "mode": "Incremental",
+        //                 "templateLink": {
+        //                     "uri": "[variables('vmTemplateUrl')]",
+        //                     "contentVersion": "1.0.0.0"
+        //                 },
+        //                 "parameters": {
+        //                     "location": {
+        //                         "value": "[parameters('location')]"
+        //                     },
+        //                     "vmName": {
+        //                         "value": "[parameters('vmName')]"
+        //                     },
+        //                     "imageSku": {
+        //                         "value": "[parameters('imageSku')]"
+        //                     },
+        //                     "imageOffer": {
+        //                         "value": "[variables('imageOffer')]"
+        //                     },
+        //                     "imageVersion": {
+        //                         "value": "[parameters('imageVersion')]"
+        //                     },
+        //                     "imagePublisher": {
+        //                         "value": "[variables('imagePublisher')]"
+        //                     },
+        //                     "nicName": {
+        //                         "value": "[variables('nicName')]"
+        //                     },
+        //                     "vmSize": {
+        //                         "value": "[parameters('vmSize')]"
+        //                     },
+        //                     "adminUserName": {
+        //                         "value": "[parameters('adminUserName')]"
+        //                     },
+        //                     "adminPassword": {
+        //                         "value": "[parameters('adminPassword')]"
+        //                     },
+        //                     "newStorageAccount": {
+        //                         "value": "[parameters('newStorageAccount')]"
+        //                     },
+        //                     "sshKey": {
+        //                         "value": "[parameters('sshKey')]"
+        //                     },
+        //                     "availabilitySetName": {
+        //                         "value": "[parameters('availabilitySetName')]"
+        //                     }
+        //                 }
+        //             }
+        //         }
         {
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2018-06-01",

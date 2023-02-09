@@ -26,11 +26,11 @@
     "adminUserName": {
       "value": "mlpan001"
     },
-    "authenticationType": {
-      "value": "password"
-    },
     "adminPasswordOrKey": {
       "value": "Testing!201555"
+    },
+    "authenticationType": {
+      "value": "password"
     },
     "imageVersion": {
       "value": "latest"
