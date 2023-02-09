@@ -34,7 +34,7 @@
         },
         "existingStorageAccountRG": {
             "type": "string",
-            "defaultValue": "",
+            "defaultValue": null,
             "metadata": {
                 "description": "Storage Resource Group of the Existing VM."
             }
@@ -73,13 +73,6 @@
                 "password"
             ],
             "defaultValue": "password"
-        },
-        "sshKey": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "SSH RSA public key file as a string."
-            }
         },
         "imageVersion": {
             "type": "string",
@@ -262,7 +255,7 @@
                 "publicKeys": [
                     {
                         "path": "[concat('/home/', parameters('adminUsername'), '/.ssh/authorized_keys')]",
-                        "keyData": "[parameters('sshKey')]"
+                        "keyData": "[parameters('adminPasswordOrKey')]"
                     }
                 ]
             }
