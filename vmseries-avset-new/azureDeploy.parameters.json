@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "location": {
-      "value": "eastus2"
+      "value": "[resourceGroup().location]"
     },
     "newStorageAccount": {
       "value": "stmlpanfirewall"
@@ -26,11 +26,11 @@
     "adminUserName": {
       "value": "mlpan001"
     },
-    "adminPasswordOrKey": {
-      "value": "Testing!201555"
-    },
     "authenticationType": {
       "value": "password"
+    },
+    "adminPasswordOrKey": {
+      "value": "Testing!201555"
     },
     "imageVersion": {
       "value": "latest"

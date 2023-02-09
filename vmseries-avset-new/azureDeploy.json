@@ -35,7 +35,7 @@
         },
         "existingStorageAccountRG": {
             "type": "string",
-            "defaultValue": null,
+            "defaultValue": "",
             "metadata": {
                 "description": "Storage Resource Group of the Existing VM."
             }
@@ -238,14 +238,14 @@
         "apiVersion": "2015-06-15",
         "imagePublisher": "paloaltonetworks",
         "imageOffer": "vmseries-flex",
-        "fwpublicIPName": "[concat(parameters('vmName'), '-fwMgmtPublicIP')]",
-        "nicName": "[concat(parameters('vmName'), '-eth')]",
+        "fwpublicIPName": "[concat('pip-',parameters('vmName'), '-fwMgmtPublicIP')]",
+        "nicName": "[concat('nic-',parameters('vmName'), '-eth')]",
         "FWPrivateIPAddressManagement": "[parameters('subnet0StartAddress')]",
         "FWPrivateIPAddressUntrust": "[parameters('subnet1StartAddress')]",
         "FWPrivateIPAddressTrust": "[parameters('subnet2StartAddress')]",
         "publicIPAddressType": "Dynamic",
         "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',parameters('virtualNetworkName'))]",
-        "nsgname-mgmt": "[concat(parameters('vmName'), '-DefaultNSG')]",
+        "nsgname-mgmt": "[concat('nsg-',parameters('vmName'), '-Default')]",
         "subnet0Ref": "[concat(variables('vnetID'),'/subnets/',parameters('subnet0Name'))]",
         "subnet1Ref": "[concat(variables('vnetID'),'/subnets/',parameters('subnet1Name'))]",
         "subnet2Ref": "[concat(variables('vnetID'),'/subnets/',parameters('subnet2Name'))]",
@@ -261,8 +261,12 @@
                     }
                 ]
             }
+        },
+        "availabilitySet": {
+            "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySetName'))]"
         }
     },
+    
     "resources": [
         {
             "name": "storageAcountSetup",
@@ -291,19 +295,6 @@
             }
         },
         {
-            "apiVersion": "2018-06-01",
-            "type": "Microsoft.Compute/availabilitySets",
-            "name": "[parameters('availabilitySetName')]",
-            "location": "[resourceGroup().location]",
-            "sku": {
-                "name": "aligned"
-            },
-            "properties": {
-                "platformFaultDomainCount": "[parameters('availabilitySetPlatformFaultDomainCount')]",
-                "platformUpdateDomainCount": "[parameters('availabilitySetPlatformUpdateDomainCount')]"
-            }
-        },
-        {
             "apiVersion": "[variables('apiVersion')]",
             "type": "Microsoft.Network/publicIPAddresses",
             "name": "[variables('fwpublicIPName')]",
@@ -318,7 +309,7 @@
         {
             "apiVersion": "[variables('apiVersion')]",
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[concat(parameters('vmName'), '-DefaultNSG')]",
+            "name": "[variables('nsgname-mgmt')]",
             "location": "[parameters('location')]",
             "properties": {
                 "securityRules": [
@@ -550,6 +541,23 @@
         //             }
         //         }
         {
+            "type": "Microsoft.Compute/availabilitySets",
+            "apiVersion": "2018-06-01",
+            "name": "[parameters('availabilitySetName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
+            ],
+            "sku": {
+                "name": "Aligned"
+            },
+            "properties": {
+                "platformFaultDomainCount": "[parameters('availabilitySetPlatformFaultDomainCount')]",
+                "platformUpdateDomainCount": "[parameters('availabilitySetPlatformUpdateDomainCount')]"
+            },
+            "condition": "[not(equals(parameters('availabilitySetName'), 'None'))]"
+        },
+        {
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2018-06-01",
             "name": "[parameters('vmName')]",
@@ -612,7 +620,7 @@
                         }
                     ]
                 },
-                "availabilitySet": "[if(equals(parameters('availabilitySetName'), 'None'), json('null'), parameters('availabilitySetName'))]"
+                "availabilitySet": "[if(equals(parameters('availabilitySetName'), 'None'), json('null'), variables('availabilitySet'))]"
             }
         }
     ]
