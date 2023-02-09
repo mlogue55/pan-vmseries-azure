@@ -3,6 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "location": {
+            "defaultValue": "[resourceGroup().location]",
             "type": "string",
             "metadata": {
                 "description": "region of resources"
@@ -57,22 +58,22 @@
                 "description": "Username for VM-Series administrator"
             }
         },
-        "adminPasswordOrKey": {
-            "type": "securestring",
-            "metadata": {
-                "description": "Password for VM-Series administrator"
-            }
-        },
         "authenticationType": {
-            "type": "string",
-            "metadata": {
-                "description": "Type of authentication "
-            },
-            "allowedValues": [
-                "sshPublicKey",
-                "password"
-            ],
-            "defaultValue": "password"
+        "type": "string",
+        "defaultValue": "password",
+        "allowedValues": [
+            "sshPublicKey",
+            "password"
+        ],
+        "metadata": {
+            "description": "Type of authentication to use on the Virtual Machine. SSH key is recommended."
+        }
+        },
+        "adminPasswordOrKey": {
+        "type": "secureString",
+        "metadata": {
+            "description": "SSH Key or password for the Virtual Machine. SSH key is recommended."
+        }
         },
         "imageVersion": {
             "type": "string",
@@ -101,7 +102,7 @@
             }
         },
         "vmSize": {
-            "type": "string",
+            "defaultValue": "Standard_DS3_v2",
             "allowedValues": [
                 "Standard_D3_v2",
                 "Standard_D4_v2",
@@ -121,6 +122,7 @@
                 "Standard_D8s_v4",
                 "Standard_D16s_v4"
             ],
+            "type": "String",
             "metadata": {
                 "description": "Azure VM size for VM-Series"
             }
