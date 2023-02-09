@@ -1,5 +1,5 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "location": {
@@ -57,7 +57,7 @@
                 "description": "Username for VM-Series administrator"
             }
         },
-        "adminPassword": {
+        "adminPasswordOrKey": {
             "type": "securestring",
             "metadata": {
                 "description": "Password for VM-Series administrator"
@@ -74,13 +74,13 @@
             ],
             "defaultValue": "password"
         },
-        "sshKey": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "SSH RSA public key file as a string."
-            }
-        },
+        // "sshKey": {
+        //     "type": "string",
+        //     "defaultValue": "",
+        //     "metadata": {
+        //         "description": "SSH RSA public key file as a string."
+        //     }
+        // },
         "imageVersion": {
             "type": "string",
             "defaultValue": "latest",
@@ -245,6 +245,7 @@
         "imageOffer": "vmseries-flex",
         "fwpublicIPName": "[concat(parameters('vmName'), '-fwMgmtPublicIP')]",
         "nicName": "[concat(parameters('vmName'), '-eth')]",
+        "FWPrivateIPAddressManagement": "[parameters('subnet0StartAddress')]",
         "FWPrivateIPAddressUntrust": "[parameters('subnet1StartAddress')]",
         "FWPrivateIPAddressTrust": "[parameters('subnet2StartAddress')]",
         "publicIPAddressType": "Dynamic",
@@ -254,11 +255,22 @@
         "subnet1Ref": "[concat(variables('vnetID'),'/subnets/',parameters('subnet1Name'))]",
         "subnet2Ref": "[concat(variables('vnetID'),'/subnets/',parameters('subnet2Name'))]",
         "storageAccountSetupURL": "[concat(parameters('baseUrl'),'/storageAccount-',parameters('storageAccountNewOrExisting'),'.json')]",
-        "vmTemplateUrl": "[concat(parameters('baseUrl'), '/virtual-machine-', parameters('authenticationType'),'.json')]"
+        //"vmTemplateUrl": "[concat(parameters('baseUrl'), '/virtual-machine-', parameters('authenticationType'),'.json')]",
+        "linuxConfiguration": {
+            "disablePasswordAuthentication": true,
+            "ssh": {
+                "publicKeys": [
+                    {
+                        "path": "[concat('/home/', parameters('adminUsername'), '/.ssh/authorized_keys')]",
+                        "keyData": "[parameters('adminPasswordOrKey')]"
+                    }
+                ]
+            }
+        }
     },
     "resources": [
         {
-            "name": "storageAcountSetup1",
+            "name": "storageAcountSetup",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2015-01-01",
             "properties": {
@@ -416,7 +428,8 @@
                     {
                         "name": "[concat('ipconfig', '0')]",
                         "properties": {
-                            "privateIPAllocationMethod": "Dynamic",
+                            "privateIPAllocationMethod": "Static",
+                            "privateIPAddress": "[variables('FWPrivateIPAddressManagement')]",
                             "publicIPAddress": {
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('fwpublicIPName'))]"
                             },
@@ -482,63 +495,129 @@
                 ]
             }
         },
+//         {
+//             "name": "PAN-VM",
+//             "type": "Microsoft.Resources/deployments",
+//             "apiVersion": "2015-01-01",
+//             "dependsOn": [
+//                 "storageAcountSetup1",
+//                 "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), '0')]",
+//                 "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), '1')]",
+//                 "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), '2')]"
+//             ],
+//             "properties": {
+//                 "mode": "Incremental",
+//                 "templateLink": {
+//                     "uri": "[variables('vmTemplateUrl')]",
+//                     "contentVersion": "1.0.0.0"
+//                 },
+//                 "parameters": {
+//                     "location": {
+//                         "value": "[parameters('location')]"
+//                     },
+//                     "vmName": {
+//                         "value": "[parameters('vmName')]"
+//                     },
+//                     "imageSku": {
+//                         "value": "[parameters('imageSku')]"
+//                     },
+//                     "imageOffer": {
+//                         "value": "[variables('imageOffer')]"
+//                     },
+//                     "imageVersion": {
+//                         "value": "[parameters('imageVersion')]"
+//                     },
+//                     "imagePublisher": {
+//                         "value": "[variables('imagePublisher')]"
+//                     },
+//                     "nicName": {
+//                         "value": "[variables('nicName')]"
+//                     },
+//                     "vmSize": {
+//                         "value": "[parameters('vmSize')]"
+//                     },
+//                     "adminUserName": {
+//                         "value": "[parameters('adminUserName')]"
+//                     },
+//                     "adminPassword": {
+//                         "value": "[parameters('adminPassword')]"
+//                     },
+//                     "newStorageAccount": {
+//                         "value": "[parameters('newStorageAccount')]"
+//                     },
+//                     "sshKey": {
+//                         "value": "[parameters('sshKey')]"
+//                     },
+//                     "availabilitySetName": {
+//                         "value": "[parameters('availabilitySetName')]"
+//                     }
+//                 }
+//             }
+//         }
         {
-            "name": "PAN-VM",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2015-01-01",
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2018-06-01",
+            "name": "[parameters('vmName')]",
+            "location": "[parameters('location')]",
             "dependsOn": [
-                "storageAcountSetup1",
-                "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), '0')]",
-                "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), '1')]",
-                "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), '2')]"
+                "[resourceId('Microsoft.Network/publicIPAddresses', variables('fwpublicIPName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsgName-mgmt'))]",
+                "[concat(variables('nicName'), '0')]",
+                "[concat(variables('nicName'), '1')]",
+                "[concat(variables('nicName'), '2')]",
+                "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySetName'))]"
             ],
+            //"zones": "[if(equals(parameters('zone'), 'None'), json('null'), variables('zones'))]",
+            "plan": {
+                "name": "[parameters('imageSku')]",
+                "product": "[variables('imageOffer')]",
+                "publisher": "[variables('imagePublisher')]"
+            },
             "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('vmTemplateUrl')]",
-                    "contentVersion": "1.0.0.0"
+                "hardwareProfile": {
+                    "vmSize": "[parameters('vmSize')]"
                 },
-                "parameters": {
-                    "location": {
-                        "value": "[parameters('location')]"
+                "osProfile": {
+                    "computerName": "[parameters('vmName')]",
+                    "adminUsername": "[parameters('adminUsername')]",
+                    "adminPassword": "[parameters('adminPasswordOrKey')]",
+                    "linuxConfiguration": "[if(equals(parameters('authenticationType'), 'password'), json('null'), variables('linuxConfiguration'))]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "[variables('imagePublisher')]",
+                        "offer": "[variables('imageOffer')]",
+                        "sku": "[parameters('imageSku')]",
+                        "version": "[parameters('imageVersion')]"
                     },
-                    "vmName": {
-                        "value": "[parameters('vmName')]"
-                    },
-                    "imageSku": {
-                        "value": "[parameters('imageSku')]"
-                    },
-                    "imageOffer": {
-                        "value": "[variables('imageOffer')]"
-                    },
-                    "imageVersion": {
-                        "value": "[parameters('imageVersion')]"
-                    },
-                    "imagePublisher": {
-                        "value": "[variables('imagePublisher')]"
-                    },
-                    "nicName": {
-                        "value": "[variables('nicName')]"
-                    },
-                    "vmSize": {
-                        "value": "[parameters('vmSize')]"
-                    },
-                    "adminUserName": {
-                        "value": "[parameters('adminUserName')]"
-                    },
-                    "adminPassword": {
-                        "value": "[parameters('adminPassword')]"
-                    },
-                    "newStorageAccount": {
-                        "value": "[parameters('newStorageAccount')]"
-                    },
-                    "sshKey": {
-                        "value": "[parameters('sshKey')]"
-                    },
-                    "availabilitySetName": {
-                        "value": "[parameters('availabilitySetName')]"
+                    "osDisk": {
+                        "createOption": "FromImage"
                     }
-                }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('nicName'),'0'))]",
+                            "properties": {
+                                "primary": true
+                            }
+                        },
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('nicName'),'1'))]",
+                            "properties": {
+                                "primary": false
+                            }
+                        },
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('nicName'),'2'))]",
+                            "properties": {
+                                "primary": false
+                            }
+                        }
+                    ]
+                },
+                "availabilitySet": "[if(equals(parameters('availabilitySetName'), 'None'), json('null'), parameters('availabilitySetName'))]"
             }
         }
     ]
