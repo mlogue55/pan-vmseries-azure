@@ -29,9 +29,6 @@
     "authenticationType": {
       "value": "password"
     },
-    "adminPasswordOrKey": {
-      "value": "Testing!201555"
-    },
     "imageVersion": {
       "value": "latest"
     },
@@ -42,7 +39,7 @@
       "value": "Standard_DS3_v2"
     },
     "availabilitySetName": {
-      "value": "FwAvSet001"
+      "value": "as-panvmseries-001"
     },
     "srcIPInboundNSG": {
       "value": "0.0.0.0/0"
@@ -51,7 +48,7 @@
       "value": "https://raw.githubusercontent.com/mlogue55/pan-vmseries-azure/master/vmseries-avset-new"
     },
     "virtualNetworkName": {
-      "value": "panVnet"
+      "value": "vnet-pan-01"
     },
     "virtualNetworkAddressPrefix": {
       "value": "192.168.0.0/16"
