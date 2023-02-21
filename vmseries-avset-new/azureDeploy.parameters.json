@@ -8,15 +8,6 @@
     "newStorageAccount": {
       "value": "stmlpanfirewall"
     },
-    "storageAccountType": {
-      "value": "Standard_LRS"
-    },
-    "storageAccountNewOrExisting": {
-      "value": "new"
-    },
-    "existingStorageAccountRG": {
-      "value": null
-    },
     "dnsNameForPublicIP": {
       "value": "mlpan001"
     },
@@ -28,6 +19,9 @@
     },
     "authenticationType": {
       "value": "password"
+    },
+    "adminPasswordOrKey": {
+      "value": "REPLACEwithSTRONGPassword123"
     },
     "imageVersion": {
       "value": "latest"
@@ -43,9 +37,6 @@
     },
     "srcIPInboundNSG": {
       "value": "0.0.0.0/0"
-    },
-    "baseUrl": {
-      "value": "https://raw.githubusercontent.com/mlogue55/pan-vmseries-azure/master/vmseries-avset-new"
     },
     "virtualNetworkName": {
       "value": "vnet-pan-01"

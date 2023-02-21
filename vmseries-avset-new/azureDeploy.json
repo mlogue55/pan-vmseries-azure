@@ -9,37 +9,6 @@
                 "description": "region of resources"
             }
         },
-        "newStorageAccount": {
-            "type": "string",
-            "metadata": {
-                "description": "Globally unique lowercase name of your storage account"
-            }
-        },
-        "storageAccountType": {
-            "type": "string",
-            "metadata": {
-                "description": "The type of the Storage Account created"
-            },
-            "defaultValue": "Standard_LRS"
-        },
-        "storageAccountNewOrExisting": {
-            "type": "string",
-            "defaultValue": "new",
-            "allowedValues": [
-                "new",
-                "existing"
-            ],
-            "metadata": {
-                "Description": "Indicates whether the Storage Account is new or existing"
-            }
-        },
-        "existingStorageAccountRG": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Storage Resource Group of the Existing VM."
-            }
-        },
         "dnsNameForPublicIP": {
             "type": "string",
             "metadata": {
@@ -129,7 +98,7 @@
         },
         "availabilitySetName": {
             "type": "string",
-            "defaultValue": "VMSeriesFwAvSet",
+            "defaultValue": "as-VMSeriesFw",
             "metadata": {
                 "description": "Azure Availability Set for VM-Series firewalls"
             }
@@ -140,13 +109,6 @@
                 "description": "Your source public IP address. Added to the restrict inbound DefaultNSG on eth0 (MGMT)"
             },
             "defaultValue": "0.0.0.0/0"
-        },
-        "baseUrl": {
-            "type": "string",
-            "metadata": {
-                "artifactsBaseUrl": ""
-            },
-            "defaultValue": "https://raw.githubusercontent.com/mlogue55/pan-vmseries-azure/master/vmseries-avset"
         },
         "virtualNetworkName": {
             "type": "string",
@@ -249,8 +211,6 @@
         "subnet0Ref": "[concat(variables('vnetID'),'/subnets/',parameters('subnet0Name'))]",
         "subnet1Ref": "[concat(variables('vnetID'),'/subnets/',parameters('subnet1Name'))]",
         "subnet2Ref": "[concat(variables('vnetID'),'/subnets/',parameters('subnet2Name'))]",
-        "storageAccountSetupURL": "[concat(parameters('baseUrl'),'/storageAccount-',parameters('storageAccountNewOrExisting'),'.json')]",
-        //"vmTemplateUrl": "[concat(parameters('baseUrl'), '/virtual-machine-', parameters('authenticationType'),'.json')]",
         "linuxConfiguration": {
             "disablePasswordAuthentication": true,
             "ssh": {
@@ -268,32 +228,6 @@
     },
     
     "resources": [
-        {
-            "name": "storageAcountSetup",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2015-01-01",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('storageAccountSetupURL')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "location": {
-                        "value": "[parameters('location')]"
-                    },
-                    "storageAccountType": {
-                        "value": "[parameters('storageAccountType')]"
-                    },
-                    "newStorageAccount": {
-                        "value": "[parameters('newStorageAccount')]"
-                    },
-                    "storageAccountExistingRG": {
-                        "value": "[parameters('existingStorageAccountRG')]"
-                    }
-                }
-            }
-        },
         {
             "apiVersion": "[variables('apiVersion')]",
             "type": "Microsoft.Network/publicIPAddresses",
@@ -481,65 +415,6 @@
                 ]
             }
         },
-        //         {
-        //             "name": "PAN-VM",
-        //             "type": "Microsoft.Resources/deployments",
-        //             "apiVersion": "2015-01-01",
-        //             "dependsOn": [
-        //                 "storageAcountSetup1",
-        //                 "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), '0')]",
-        //                 "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), '1')]",
-        //                 "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), '2')]"
-        //             ],
-        //             "properties": {
-        //                 "mode": "Incremental",
-        //                 "templateLink": {
-        //                     "uri": "[variables('vmTemplateUrl')]",
-        //                     "contentVersion": "1.0.0.0"
-        //                 },
-        //                 "parameters": {
-        //                     "location": {
-        //                         "value": "[parameters('location')]"
-        //                     },
-        //                     "vmName": {
-        //                         "value": "[parameters('vmName')]"
-        //                     },
-        //                     "imageSku": {
-        //                         "value": "[parameters('imageSku')]"
-        //                     },
-        //                     "imageOffer": {
-        //                         "value": "[variables('imageOffer')]"
-        //                     },
-        //                     "imageVersion": {
-        //                         "value": "[parameters('imageVersion')]"
-        //                     },
-        //                     "imagePublisher": {
-        //                         "value": "[variables('imagePublisher')]"
-        //                     },
-        //                     "nicName": {
-        //                         "value": "[variables('nicName')]"
-        //                     },
-        //                     "vmSize": {
-        //                         "value": "[parameters('vmSize')]"
-        //                     },
-        //                     "adminUserName": {
-        //                         "value": "[parameters('adminUserName')]"
-        //                     },
-        //                     "adminPassword": {
-        //                         "value": "[parameters('adminPassword')]"
-        //                     },
-        //                     "newStorageAccount": {
-        //                         "value": "[parameters('newStorageAccount')]"
-        //                     },
-        //                     "sshKey": {
-        //                         "value": "[parameters('sshKey')]"
-        //                     },
-        //                     "availabilitySetName": {
-        //                         "value": "[parameters('availabilitySetName')]"
-        //                     }
-        //                 }
-        //             }
-        //         }
         {
             "type": "Microsoft.Compute/availabilitySets",
             "apiVersion": "2018-06-01",
@@ -571,7 +446,6 @@
                 "[concat(variables('nicName'), '2')]",
                 "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySetName'))]"
             ],
-            //"zones": "[if(equals(parameters('zone'), 'None'), json('null'), variables('zones'))]",
             "plan": {
                 "name": "[parameters('imageSku')]",
                 "product": "[variables('imageOffer')]",
