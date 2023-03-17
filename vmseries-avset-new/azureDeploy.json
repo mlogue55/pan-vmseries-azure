@@ -110,6 +110,17 @@
             },
             "defaultValue": "0.0.0.0/0"
         },
+        "virtualNetworkNewOrExisting": {
+            "type": "string",
+            "defaultValue": "new",
+            "allowedValues": [
+                "new",
+                "existing"
+            ],
+            "metadata": {
+                "Description": "Indicates whether the virtualNetwork is new or existing"
+            }
+        },
         "virtualNetworkName": {
             "type": "string",
             "metadata": {
@@ -297,6 +308,7 @@
             "type": "Microsoft.Network/virtualNetworks",
             "name": "[parameters('virtualNetworkName')]",
             "location": "[parameters('location')]",
+            "condition": "[equals(parameters('virtualNetworkNewOrExisting'),'New')]",
             "dependsOn": [
                 "[concat('Microsoft.Network/networkSecurityGroups/', variables('nsgname-mgmt'))]"
             ],
@@ -354,7 +366,7 @@
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('fwpublicIPName'))]"
                             },
                             "subnet": {
-                                "id": "[variables(concat('subnet','0','Ref'))]"
+                                "id": "[variables('subnet0Ref')]"
                             }
                         }
                     }
@@ -381,7 +393,7 @@
                             "privateIPAllocationMethod": "Static",
                             "privateIPAddress": "[variables('FWPrivateIPAddressUntrust')]",
                             "subnet": {
-                                "id": "[variables(concat('subnet','1','Ref'))]"
+                                "id": "[variables('subnet1Ref')]"
                             }
                         }
                     }
@@ -408,7 +420,7 @@
                             "privateIPAllocationMethod": "Static",
                             "privateIPAddress": "[variables('FWPrivateIPAddressTrust')]",
                             "subnet": {
-                                "id": "[variables(concat('subnet','2','Ref'))]"
+                                "id": "[variables('subnet2Ref')]"
                             }
                         }
                     }
